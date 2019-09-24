@@ -3855,42 +3855,53 @@ const token = core.getInput("github-token");
 const octokit = new github.GitHub(token);
 
 async function run() {
-  const listSuitesResponse = await octokit.checks.listSuitesForRef({
-    ...github.context.repo,
-    ref: process.env.GITHUB_SHA
-  });
+  try {
+    const listSuitesResponse = await octokit.checks.listSuitesForRef({
+      ...github.context.repo,
+      ref: process.env.GITHUB_SHA
+    });
 
-  const checkSuite =
-    listSuitesResponse.data.total_count === 1 &&
-    listSuitesResponse.data.check_suites[0];
-  if (!checkSuite) return;
+    const checkSuite =
+      listSuitesResponse.data.total_count === 1 &&
+      listSuitesResponse.data.check_suites[0];
+    if (!checkSuite) {
+      console.log("no check suite");
+      return;
+    }
 
-  const checkRunsResponse = await octokit.checks.listForSuite({
-    ...github.context.repo,
-    check_name: "Lint",
-    check_suite_id: checkSuite.id
-  });
-  const checkRun =
-    checkRunsResponse.data.total_count && checkRunsResponse.data.check_runs[0];
-  if (!checkRun) return;
+    const checkRunsResponse = await octokit.checks.listForSuite({
+      ...github.context.repo,
+      check_name: "Lint",
+      check_suite_id: checkSuite.id
+    });
+    const checkRun =
+      checkRunsResponse.data.total_count &&
+      checkRunsResponse.data.check_runs[0];
+    if (!checkRun) {
+      console.log("no check run");
+      return;
+    }
 
-  console.log({ checkRun });
+    console.log({ checkRun });
 
-  await octokit.checks.update({
-    ...github.context.repo,
-    check_run_id: checkRun.id,
-    output: {
-      summary: "Hey all! ya don' goofed",
-      title: "Linting"
-    },
-    actions: [
-      {
-        label: "fix",
-        description: "run prettier",
-        identifier: "prettier"
-      }
-    ]
-  });
+    await octokit.checks.update({
+      ...github.context.repo,
+      check_run_id: checkRun.id,
+      output: {
+        summary: "Hey all! ya don' goofed",
+        title: "Linting"
+      },
+      actions: [
+        {
+          label: "fix",
+          description: "run prettier",
+          identifier: "prettier"
+        }
+      ]
+    });
+  } catch (err) {
+    core.error(err);
+  }
 }
 
 run();
