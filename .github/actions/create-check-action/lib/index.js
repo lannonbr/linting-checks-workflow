@@ -3861,6 +3861,8 @@ async function run() {
       ref: process.env.GITHUB_SHA
     });
 
+    console.log(JSON.stringify(listSuitesResponse));
+
     const checkSuite =
       listSuitesResponse.data.total_count === 1 &&
       listSuitesResponse.data.check_suites[0];
