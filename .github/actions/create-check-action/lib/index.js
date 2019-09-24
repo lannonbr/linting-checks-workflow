@@ -3863,9 +3863,13 @@ async function run() {
 
     console.log(JSON.stringify(listSuitesResponse));
 
-    const checkSuite =
-      listSuitesResponse.data.total_count === 1 &&
-      listSuitesResponse.data.check_suites[0];
+    const checkSuite = listSuitesResponse.data.check_suites.find(
+      suite => suite.app.slug === "github-actions"
+    );
+
+    // const checkSuite =
+    //   listSuitesResponse.data.total_count === 1 &&
+    //   listSuitesResponse.data.check_suites[0];
     if (!checkSuite) {
       console.log("no check suite");
       return;
