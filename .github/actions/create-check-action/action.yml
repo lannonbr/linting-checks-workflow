@@ -1,0 +1,10 @@
+name: "create-check-action"
+description: "Action to create a check action (not to be confused with a github action)"
+author: "Benjamin Lannon <benjamin@lannonbr.com>"
+inputs:
+  github-token:
+    description: GitHub Personal Access Token
+    required: true
+runs:
+  using: "node12"
+  main: "./lib/index.js"

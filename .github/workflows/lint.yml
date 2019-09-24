@@ -1,23 +1,25 @@
 on: push
 jobs:
   lint:
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: start check
-        uses: actions/github-script@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            github.checks.create({ ...context.repo, name: "Lint: Prettier", head_sha: process.env.GITHUB_SHA })
+      # - name: start check
+      #   uses: actions/github-script@v1
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     script: |
+      #       github.checks.create({ ...context.repo, name: "Lint: Prettier", head_sha: process.env.GITHUB_SHA })
       - name: run prettier
         run: |
-          npx prettier --check
-      - name: success if passed
-        if: success()
-        run: |
-          # complete the check run saying it passed
+          npx prettier --check "*.js"
+      # - name: success if passed
+      #   if: success()
+      #   run: |
+      #     # complete the check run saying it passed
       - name: error if failure
         if: failure()
-        run: |
-          # complete the check run with a failure, and create a button saying 
+        uses: ./.github/actions/create-check-action
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
