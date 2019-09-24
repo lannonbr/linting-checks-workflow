@@ -1,0 +1,32 @@
+name: run prettier on check action
+on:
+  check_run:
+    types: [requested_action]
+jobs:
+  run_prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Do the thing
+        if: github.event.requested_action.identifier == "prettier"
+        run: |
+          # Setup name / email for comitter
+          git config user.name "GitHub Action Bot"
+          git config user.email "<>"
+          
+          # Grab the name of the branch (refs/heads/master => master)
+          REF=$(echo "$GITHUB_REF" | awk -F / '{ print $3 }')
+          
+          # Checkout into the branch from origin/branch
+          git checkout -B $REF "origin/$REF"
+          
+          # Do some action that makes untracked changes
+          npx prettier --write
+          
+          # Setup the remote to auth with the GITHUB_TOKEN
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          
+          # Stage, commit, and push
+          git add .
+          git commit -m "fix linting"
+          git push origin "HEAD:$REF"
