@@ -44,6 +44,8 @@ async function run() {
     await octokit.checks.update({
       ...github.context.repo,
       check_run_id: checkRun.id,
+      status: "completed",
+      conclusion: "success",
       output: {
         summary: "Hey all! ya don' goofed",
         title: "Linting"
