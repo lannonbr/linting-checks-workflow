@@ -14,7 +14,7 @@ async function run() {
       ref: process.env.GITHUB_SHA
     });
 
-    console.log(JSON.stringify(listSuitesResponse));
+    // console.log(JSON.stringify(listSuitesResponse));
 
     const checkSuite = listSuitesResponse.data.check_suites.find(
       suite => suite.app.slug === "github-actions"
@@ -46,8 +46,8 @@ async function run() {
     await octokit.checks.update({
       ...github.context.repo,
       check_run_id: checkRun.id,
-      // status: "completed",
-      // conclusion: "success",
+      status: "completed",
+      conclusion: "action_required",
       output: {
         summary: "Hey all! ya don' goofed",
         title: "Linting",
