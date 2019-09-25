@@ -3852,7 +3852,9 @@ const github = __webpack_require__(469);
 
 const token = core.getInput("github-token");
 
-const octokit = new github.GitHub(token);
+const octokit = new github.GitHub(token, {
+  previews: ["antiope"]
+});
 
 async function run() {
   try {

@@ -3,7 +3,9 @@ const github = require("@actions/github");
 
 const token = core.getInput("github-token");
 
-const octokit = new github.GitHub(token);
+const octokit = new github.GitHub(token, {
+  previews: ["antiope"]
+});
 
 async function run() {
   try {
