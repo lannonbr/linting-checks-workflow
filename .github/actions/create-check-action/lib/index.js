@@ -3912,7 +3912,7 @@ async function run() {
       },
       actions: [
         {
-          label: "fix",
+          label: "fix linting",
           description: "run prettier",
           identifier: "prettier"
         }
@@ -3921,6 +3921,10 @@ async function run() {
   } catch (err) {
     core.error(err);
   }
+
+  await new Promise(resolve => {
+    setTimeout(() => resolve(), 5000);
+  });
 }
 
 run();
