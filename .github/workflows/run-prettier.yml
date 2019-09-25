@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Do the thing
+      - nam: Do the thing
         if: github.event.requested_action.identifier == "prettier"
         run: |
           # Setup name / email for comitter
