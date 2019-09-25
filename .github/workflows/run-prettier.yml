@@ -1,15 +1,15 @@
 name: run prettier on check action
 on:
   check_run:
-    types: [requested_action]
+    types: requested_action
 jobs:
   run_prettier:
     name: run prettier
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - nam: Do the thing
-        if: github.event.requested_action.identifier == "prettier"
+      - name: Do the thing
+        if: github.event.requested_action.identifier == 'prettier'
         run: |
           # Setup name / email for comitter
           git config user.name "GitHub Action Bot"
